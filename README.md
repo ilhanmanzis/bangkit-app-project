@@ -1,2 +1,1 @@
 # bangkit-app-project
-demo
