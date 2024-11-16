@@ -21,13 +21,19 @@ This project is the final part of Bangkit Academy. This project involves creatin
 git clone https://github.com/ilhanmanzis/bangkit-app-project
 ```
 
-2. Install the required packages
+2. copy file .env.example menjadi .env, kemudian isi yang diperlukan didalam file .env
+
+```sh
+cp .env.example .env
+```
+
+3. Install the required packages
 
 ```sh
 npm install
 ```
 
-3. how to run
+4. how to run
 
 - development
 
