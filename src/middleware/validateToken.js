@@ -2,8 +2,6 @@ import jwt from 'jsonwebtoken';
 import dotenv from "dotenv";
 dotenv.config();
 
-const SECRET_KEY = process.env.JWT_SECRET;
-
 const validateToken = async (request, h) => {
   const authHeader = request.headers.authorization;
 
@@ -14,12 +12,16 @@ const validateToken = async (request, h) => {
   const token = authHeader.split(' ')[1];
 
   try {
-    const decoded = jwt.verify(token, SECRET_KEY);
-    request.user = decoded; // Menyimpan informasi user
+    const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+    request.user = decoded; // Menyimpan informasi user di objek request
     return h.continue;
   } catch (err) {
-    return h.response({ message: 'Invalid or expired token' }).code(401).takeover();
+    if (err.name === 'TokenExpiredError') {
+      return h.response({ message: 'Token has expired' }).code(401).takeover();
+    }
+    return h.response({ message: 'Invalid token' }).code(403).takeover();
   }
 };
 
 export default validateToken;
+
