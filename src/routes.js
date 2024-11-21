@@ -5,6 +5,7 @@ import validateToken from './middleware/validateToken.js';
 import {validateRegister, registerSchema}  from './middleware/validateRegister.js';
 import { loginSchema, validateLogin } from './middleware/validateLogin.js';
 import refreshToken from './handlers/refreshToken.js';
+import getUser from './handlers/getUser.js';
 
 
 const routes = [
@@ -38,6 +39,14 @@ const routes = [
     method:'GET',
     path:'/token',
     handler:refreshToken
+  },
+  {
+    method:'GET',
+    path:'/profile',
+    options: {
+      pre: [{ method: validateToken }],
+    },
+    handler:getUser
   },
 ];
 

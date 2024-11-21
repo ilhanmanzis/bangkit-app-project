@@ -11,7 +11,7 @@ const login = async (request, h) => {
     //mencari data user
     const [rows] = await db.query('SELECT * FROM users WHERE email = ?', [email]);
     if (rows.length === 0) {
-      return h.response({ message: {
+      return h.response({ errors: {
         email :['User tidak ditemukan']
       } }).code(404);
     }
@@ -22,7 +22,7 @@ const login = async (request, h) => {
     const isValidPassword = await bcrypt.compare(password, user.password);
 
     if (!isValidPassword) {
-      return h.response({ message: {
+      return h.response({ errors: {
         password:['Password Salah']
       } }).code(401);
     }
@@ -53,7 +53,11 @@ const login = async (request, h) => {
     
   } catch (error) {
     console.error(error);
-    return h.response({ message: 'Internal server error' }).code(500);
+    return h.response({ errors:{
+      server:[
+        'Internal server error'
+      ]
+    }}).code(500);
   }
 };
 
