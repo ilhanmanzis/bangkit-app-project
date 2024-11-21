@@ -13,6 +13,11 @@ This project is the final part of Bangkit Academy. This project involves creatin
 - bcryptjs (untuk enkripsi password)
 - Joi (untuk validasi data)
 
+## documentation
+
+[Documentation](https://app.swaggerhub.com/apis-docs/ILHANMANZIS1207/api-dokumentasi_ideat/1.0.0)
+
+
 ## installation
 
 1. clone the repository:
