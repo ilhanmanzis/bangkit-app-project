@@ -2,7 +2,7 @@ import jwt from 'jsonwebtoken';
 import dotenv from "dotenv";
 dotenv.config();
 
-const SECRET_KEY = process.env.JWT_SECRET;
+
 
 const validateToken = async (request, h) => {
   const authHeader = request.headers.authorization;
@@ -14,7 +14,7 @@ const validateToken = async (request, h) => {
   const token = authHeader.split(' ')[1];
 
   try {
-    const decoded = jwt.verify(token, SECRET_KEY);
+    const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
     request.user = decoded; // Menyimpan informasi user
     return h.continue;
   } catch (err) {

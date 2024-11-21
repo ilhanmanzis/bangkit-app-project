@@ -8,22 +8,28 @@ export const updateProfile = async (request, h) => {
      // Periksa apakah pengguna dengan ID yang diberikan ada
     const [rows] = await db.query('SELECT * FROM users WHERE id = ?', [id]);
     if (rows.length === 0) {
-      return h.response({ message: 'User not found' }).code(404);
+      return h.response({ 
+        request_id:id,
+        errors: {
+            id:[
+                'User not found'
+            ]
+      }}).code(404);
     }
 
     // Periksa apakah email sudah digunakan oleh pengguna lain
     const [emailCheck] = await db.query('SELECT * FROM users WHERE email = ? AND id != ?', [email, id]);
     if (emailCheck.length > 0) {
-      return h.response({ message: 'Email is already in use by another user' }).code(400);
+      return h.response({ 
+        request_email:email,
+        errors: {
+            email:[
+                'Email is already in use by another user'
+            ]
+      }}).code(400);
     }
 
     // Update profil pengguna
-    await db.query(
-      `UPDATE users 
-       SET nama = ?, email = ?, jenis_kelamin = ?, tanggal_lahir = ?, berat_badan = ?, tinggi_badan = ? 
-       WHERE id = ?`,
-      [nama, email, jenisKelamin, tanggalLahir, beratBadan, tinggiBadan, id]
-    );
     await db.query(
       `UPDATE users 
        SET nama = ?, email = ?, jenis_kelamin = ?, tanggal_lahir = ?, berat_badan = ?, tinggi_badan = ? 
@@ -34,6 +40,10 @@ export const updateProfile = async (request, h) => {
     return h.response({ message: 'Profile updated successfully' }).code(200);
   } catch (error) {
     console.error(error);
-    return h.response({ message: 'Internal server error' }).code(500);
+        return h.response({ errors:{
+            server:[
+                'Internal server error'
+            ]
+        }}).code(500);
   }
 };

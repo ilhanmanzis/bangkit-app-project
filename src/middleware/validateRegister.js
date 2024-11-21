@@ -14,7 +14,7 @@ export const validateRegister = (schema) => {
         return acc;
       }, {});
 
-      return h.response({ message: errorMessage }).code(400).takeover();
+      return h.response({ errors: errorMessage }).code(400).takeover();
     }
     return h.continue;
   };

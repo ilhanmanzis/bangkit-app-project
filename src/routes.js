@@ -4,8 +4,8 @@ import validateToken from './middleware/validateToken.js';
 import { validateRegister, registerSchema } from './middleware/validateRegister.js';
 import { updateProfile } from './handlers/updateProfile.js';
 import { updatePassword } from './handlers/updatePassword.js';
-import { updateProfileSchema, updatePasswordSchema } from './validations/profileValidation.js';
 import { profileSchema, validateProfile } from './middleware/validateProfile.js';
+import { passwordSchema, validateUpdatePassword } from './middleware/validateUpdatePassword.js';
 
 const routes = [
   {
@@ -48,7 +48,7 @@ const routes = [
     options: {
       pre: [
         { method: validateToken },
-        { method: validateRegister(updatePasswordSchema) },
+        { method: validateUpdatePassword(passwordSchema) },
       ],
     },
     handler: updatePassword, // Menggabungkan validasi untuk update password

@@ -2,7 +2,7 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import db from '../config/db.js';
 
-const SECRET_KEY = process.env.JWT_SECRET;
+
 
 // Login handler (sudah ada sebelumnya)
 export const login = async (request, h) => {
@@ -21,7 +21,7 @@ export const login = async (request, h) => {
       return h.response({ message: 'Invalid password' }).code(401);
     }
 
-    const token = jwt.sign({ id: user.id, email: user.email }, SECRET_KEY, { expiresIn: '1h' });
+    const token = jwt.sign({ id: user.id, email: user.email }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1h' });
     return h.response({ message: 'Login successful', token });
   } catch (error) {
     console.error(error);
