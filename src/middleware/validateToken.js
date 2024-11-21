@@ -2,6 +2,8 @@ import jwt from 'jsonwebtoken';
 import dotenv from "dotenv";
 dotenv.config();
 
+
+
 const validateToken = async (request, h) => {
   const authHeader = request.headers.authorization;
 
@@ -17,7 +19,9 @@ const validateToken = async (request, h) => {
 
   try {
     const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+
     request.user = decoded; // Menyimpan informasi user di objek request
+
     return h.continue;
   } catch (err) {
     if (err.name === 'TokenExpiredError') {

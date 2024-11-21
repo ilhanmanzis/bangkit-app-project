@@ -3,6 +3,8 @@ import jwt from 'jsonwebtoken';
 import db from '../config/db.js';
 
 
+
+
 // Login handler (sudah ada sebelumnya)
 const login = async (request, h) => {
   const { email, password } = request.payload;
@@ -26,6 +28,7 @@ const login = async (request, h) => {
         password:['Password Salah']
       } }).code(401);
     }
+
 
     //membuat token JWT
     const accessToken = jwt.sign({ id: user.id, email: user.email }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: process.env.EXPIRED_TOKEN });
@@ -51,6 +54,7 @@ const login = async (request, h) => {
         ttl: 24 * 60 * 60 * 1000, // 1 hari dalam milidetik
     });
     
+
   } catch (error) {
     console.error(error);
     return h.response({ errors:{
