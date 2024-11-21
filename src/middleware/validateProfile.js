@@ -1,6 +1,6 @@
 import Joi from "joi";
 
-export const validateRegister = (schema) => {
+export const validateProfile = (schema) => {
   return (request, h) => {
     const { error } = schema.validate(request.payload, { abortEarly: false });
     if (error) {
@@ -22,7 +22,7 @@ export const validateRegister = (schema) => {
 
 
 
-export const registerSchema = Joi.object({
+export const profileSchema = Joi.object({
   nama: Joi.string()
     .pattern(/^[A-Za-z\s]+$/, { name: 'letters and spaces' })
     .min(3)
@@ -62,13 +62,5 @@ export const registerSchema = Joi.object({
     'number.base': 'Tinggi badan harus berupa angka',
     'number.positive': 'Tinggi badan harus lebih dari 0',
     'any.required': 'Tinggi badan tidak boleh kosong',
-  }),
-  password: Joi.string().min(6).required().messages({
-    'string.empty': 'Password tidak boleh kosong',
-    'string.min': 'Password harus minimal 6 karakter',
-  }),
-  confirmPassword: Joi.string().valid(Joi.ref('password')).required().messages({
-    'string.empty': 'Konfirmasi password tidak boleh kosong',
-    'any.only': 'Konfirmasi password harus sama dengan password',
   }),
 });

@@ -6,13 +6,17 @@ const refreshToken = async (request, h) => {
     //const token = request.payload.refreshToken; // Mengambil token dari payload
     const token = request.state.refreshToken; // Mengambil token dari cookie
     if (!token) {
-      return h.response({ message: 'Refresh token missing' }).code(401);
+      return h.response({ erros:{
+        token:['Refresh token missing']
+      }  }).code(401);
     }
 
     // Mencari data user berdasarkan refresh token
     const [rows] = await db.query('SELECT * FROM users WHERE refresh_token = ?', [token]);
     if (rows.length === 0) {
-      return h.response({ message: 'Invalid refresh token' }).code(403);
+      return h.response({ erros:{
+        token:['Invalid refresh token']
+      }  }).code(403);
     }
 
     const user = rows[0];
@@ -21,7 +25,9 @@ const refreshToken = async (request, h) => {
     try {
       jwt.verify(token, process.env.REFRESH_TOKEN_SECRET);
     } catch (err) {
-      return h.response({ message: 'Invalid or expired refresh token' }).code(403);
+      return h.response({ erros:{
+        token:['Invalid or expired refresh token']
+      }  }).code(403);
     }
 
     // Membuat access token baru
@@ -40,7 +46,11 @@ const refreshToken = async (request, h) => {
     }).code(200);
   } catch (error) {
     console.error(error);
-    return h.response({ message: 'Internal server error' }).code(500);
+    return h.response({ errors:{
+      server:[
+        'Internal server error'
+      ]
+    }}).code(500);
   }
 };
 
