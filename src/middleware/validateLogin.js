@@ -14,7 +14,7 @@ export const validateLogin = (schema) => {
         return acc;
       }, {});
 
-      return h.response({ message: errorMessage }).code(400).takeover();
+      return h.response({ error: errorMessage }).code(400).takeover();
     }
     return h.continue;
   };

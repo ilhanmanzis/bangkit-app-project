@@ -43,9 +43,14 @@ export const registerSchema = Joi.object({
       'string.empty': 'Jenis kelamin tidak boleh kosong',
       'any.only': 'Jenis kelamin harus Laki-laki atau Perempuan',
     }),
-  tanggalLahir: Joi.date().required().messages({
-    'date.base': 'Tanggal lahir harus dalam format tanggal yang valid',
-    'any.required': 'Tanggal lahir tidak boleh kosong',
+  tanggalLahir: Joi.date().required()
+  .iso() // Validasi ISO 8601 (YYYY-MM-DD)
+  .less('now') // Tanggal harus sebelum hari ini
+  .messages({
+      'date.base': 'Tanggal lahir harus dalam format tanggal yang valid',
+      'any.required': 'Tanggal lahir tidak boleh kosong',
+      'date.iso': 'Tanggal lahir harus dalam format YYYY-MM-DD.',
+      'date.less': 'Tanggal lahir harus sebelum hari ini.',
   }),
   beratBadan: Joi.number().positive().required().messages({
     'number.base': 'Berat badan harus berupa angka',
