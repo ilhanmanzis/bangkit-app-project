@@ -1,9 +1,7 @@
 import routes from "./routes.js";
 import Hapi from "@hapi/hapi";
 import dotenv from "dotenv";
-import Inert from "@hapi/inert";
-import Vision from "@hapi/vision";
-import HapiSwagger from "hapi-swagger";
+
 dotenv.config();
 
 const init = async()=>{
@@ -17,21 +15,28 @@ const init = async()=>{
         }
     });
 
-    const swaggerOptions = {
-        info:{
-            title:"IDEAT API DOCUMENTATONS",
-            version:"1.0.0",
-        },
-    };
+    // Register plugins
+  const swaggerOptions = {
+    info: {
+      title: openApiSpec.info.title,
+      version: openApiSpec.info.version,
+      description: openApiSpec.info.description
+    },
+
+    documentationPath: '/documentation',
+    grouping: 'tags'
+  };
 
     await server.register([
-        Inert,
-        Vision,
-        {
-            plugin:HapiSwagger,
-            options:swaggerOptions
-        }
-    ]);
+    Inert,
+    Vision,
+    {
+      plugin: HapiSwagger,
+      options: swaggerOptions
+    }
+  ]); 
+
+
     server.route(routes);
     await server.start();
     console.log("============================================================");  

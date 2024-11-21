@@ -1,5 +1,3 @@
-
-
 import login  from './handlers/login.js';
 import register  from './handlers/register.js';
 import validateToken from './middleware/validateToken.js';
@@ -13,13 +11,12 @@ import { profileSchema, validateProfile } from './middleware/validateProfile.js'
 import { passwordSchema, validateUpdatePassword } from './middleware/validateUpdatePassword.js';
 
 
-
 const routes = [
   {
     method: 'POST',
     path: '/register',
     options: {
-        pre: [{ method: validateRegister(registerSchema) }],
+      pre: [{ method: validateRegister(registerSchema) }],
     },
     handler: register, // Route untuk register
   },
