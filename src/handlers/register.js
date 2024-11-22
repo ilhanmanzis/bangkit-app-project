@@ -9,7 +9,7 @@ const register = async (request, h) => {
     //cek email apakah sudah ada?
     const [existingUser] = await db.query('SELECT * FROM users WHERE email = ?', [email]);
     if (existingUser.length > 0) {
-      return h.response({ message: {
+      return h.response({ errors: {
           email :[
             'Email sudah terdaftar'
           ]
@@ -33,7 +33,11 @@ const register = async (request, h) => {
     return h.response({ message: 'User berhasil terdaftar' }).code(201);
   } catch (error) {
     console.error(error);
-    return h.response({ message: 'Internal server error' }).code(500);
+    return h.response({ errors:{
+      server:[
+        'Internal server error'
+      ]
+    }}).code(500);
   }
 };
 

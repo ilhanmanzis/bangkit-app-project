@@ -1,6 +1,6 @@
 import Joi from "joi";
 
-export const validateLogin = (schema) => {
+export const validateUpdatePassword = (schema) => {
   return (request, h) => {
     const { error } = schema.validate(request.payload, { abortEarly: false });
     if (error) {
@@ -21,13 +21,19 @@ export const validateLogin = (schema) => {
 };
 
 
-export const loginSchema = Joi.object({
-  email: Joi.string().email().required().messages({
-    'string.empty': 'Email tidak boleh kosong',
-    'string.email': 'Email harus dalam format yang valid',
+
+export const passwordSchema = Joi.object({
+  
+  oldPassword: Joi.string().min(6).required().messages({
+    'string.empty': 'Password lama tidak boleh kosong',
+    'string.min': 'Password lama harus minimal 6 karakter',
   }),
-  password: Joi.string().min(6).required().messages({
-    'string.empty': 'Password tidak boleh kosong',
-    'string.min': 'Password harus minimal 6 karakter',
+  newPassword: Joi.string().min(6).required().messages({
+    'string.empty': 'Password baru tidak boleh kosong',
+    'string.min': 'Password baru harus minimal 6 karakter',
+  }),
+  confirmNewPassword: Joi.string().valid(Joi.ref('newPassword')).required().messages({
+    'string.empty': 'Konfirmasi password baru tidak boleh kosong',
+    'any.only': 'Konfirmasi password baru harus sama dengan password',
   })
 });

@@ -1,6 +1,7 @@
 import routes from "./routes.js";
 import Hapi from "@hapi/hapi";
 import dotenv from "dotenv";
+
 dotenv.config();
 
 const init = async()=>{
@@ -13,9 +14,12 @@ const init = async()=>{
             }
         }
     });
+
     server.route(routes);
     await server.start();
+    console.log("============================================================");  
     console.log(`server run is ${server.info.uri}`);
+    console.log("============================================================");
 }
 
 init();

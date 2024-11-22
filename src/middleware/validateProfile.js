@@ -1,6 +1,6 @@
 import Joi from "joi";
 
-export const validateRegister = (schema) => {
+export const validateProfile = (schema) => {
   return (request, h) => {
     const { error } = schema.validate(request.payload, { abortEarly: false });
     if (error) {
@@ -22,8 +22,8 @@ export const validateRegister = (schema) => {
 
 
 
-export const registerSchema = Joi.object({
-  nama: Joi.string().example("string")
+export const profileSchema = Joi.object({
+  nama: Joi.string()
     .pattern(/^[A-Za-z\s]+$/, { name: 'letters and spaces' })
     .min(3)
     .required()
@@ -46,7 +46,6 @@ export const registerSchema = Joi.object({
   tanggalLahir: Joi.date().required()
   .iso() // Validasi ISO 8601 (YYYY-MM-DD)
   .less('now') // Tanggal harus sebelum hari ini
-  .example("2024-11-21")
   .messages({
     'date.base': 'Tanggal lahir harus dalam format tanggal yang valid',
     'date.format': 'Tanggal lahir harus dalam format YYYY-MM-DD.',
@@ -63,13 +62,5 @@ export const registerSchema = Joi.object({
     'number.base': 'Tinggi badan harus berupa angka',
     'number.positive': 'Tinggi badan harus lebih dari 0',
     'any.required': 'Tinggi badan tidak boleh kosong',
-  }),
-  password: Joi.string().min(6).required().messages({
-    'string.empty': 'Password tidak boleh kosong',
-    'string.min': 'Password harus minimal 6 karakter',
-  }),
-  confirmPassword: Joi.string().valid(Joi.ref('password')).example("string").required().messages({
-    'string.empty': 'Konfirmasi password tidak boleh kosong',
-    'any.only': 'Konfirmasi password harus sama dengan password',
   }),
 });
