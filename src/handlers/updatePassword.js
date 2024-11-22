@@ -23,7 +23,7 @@ export const updatePassword = async (request, h) => {
 
     if (!isMatch) {
       return h.response({ errors: {
-        password:['Password Salah']
+        oldPassword:['Password lama salah']
       } }).code(401);
     }
 
@@ -32,7 +32,7 @@ export const updatePassword = async (request, h) => {
     const hashedNewPassword = await bcrypt.hash(newPassword, salt); // Enkripsi password baru
     await db.query('UPDATE users SET password = ? WHERE id = ?', [hashedNewPassword, id]);
 
-    return h.response({ message: 'Password updated successfully' }).code(200);
+    return h.response({ message: 'Password berhasil diubah' }).code(200);
   } catch (error) {
     console.error(error);
         return h.response({ errors:{
