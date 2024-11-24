@@ -3,7 +3,7 @@ import db from '../config/db.js';
 
 // Register handler
 const register = async (request, h) => {
-  const { nama, email, jenisKelamin, tanggalLahir, beratBadan, tinggiBadan, password} = request.payload;
+  const { nama, email, password} = request.payload;
 
   try {
     //cek email apakah sudah ada?
@@ -27,7 +27,7 @@ const register = async (request, h) => {
     await db.query(
       `INSERT INTO users (nama, email, jenis_kelamin, tanggal_lahir, berat_badan, tinggi_badan, password) 
        VALUES (?, ?, ?, ?, ?, ?, ?)`,
-      [nama, email, jenisKelamin, tanggalLahir, beratBadan, tinggiBadan, hashedPassword]
+      [nama, email, null, null, null, null, hashedPassword]
     );
 
     return h.response({ message: 'User berhasil terdaftar' }).code(201);
