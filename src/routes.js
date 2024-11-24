@@ -9,6 +9,7 @@ import { updateProfile } from './handlers/updateProfile.js';
 import { updatePassword } from './handlers/updatePassword.js';
 import { profileSchema, validateProfile } from './middleware/validateProfile.js';
 import { passwordSchema, validateUpdatePassword } from './middleware/validateUpdatePassword.js';
+import logout from './handlers/logout.js';
 
 
 const routes = [
@@ -72,6 +73,14 @@ const routes = [
       pre: [{ method: validateToken }],
     },
     handler:getUser
+  },
+  {
+    method:'GET',
+    path:'/logout',
+    options:{
+      pre:[{method: validateLogin}]
+    },
+    handler:logout
   },
 ];
 
