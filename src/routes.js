@@ -61,11 +61,6 @@ const routes = [
     },
     handler: updatePassword, // Menggabungkan validasi untuk update password
   },
-  // {
-  //   method:'GET',
-  //   path:'/token',
-  //   handler:refreshToken
-  // },
   {
     method:'GET',
     path:'/profile',

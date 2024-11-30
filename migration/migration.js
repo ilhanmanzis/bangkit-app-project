@@ -11,7 +11,6 @@ const createUsersTable = async () => {
       berat_badan INT DEFAULT NULL,
       tinggi_badan INT DEFAULT NULL,
       password VARCHAR(255) NOT NULL,
-      refresh_token TEXT DEFAULT NULL
     );
   `;
 

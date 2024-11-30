@@ -22,8 +22,6 @@ const register = async (request, h) => {
       }).code(400);
     }
 
-    
-
     //membuat enkripsi password
     const salt = await bcrypt.genSalt();
     const hashedPassword = await bcrypt.hash(password, salt); // Enkripsi password

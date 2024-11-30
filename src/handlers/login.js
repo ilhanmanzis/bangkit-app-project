@@ -42,15 +42,6 @@ const login = async (request, h) => {
     //membuat token JWT
     const token = jwt.sign({ id: user.id, email: user.email }, process.env.ACCESS_TOKEN_SECRET);
 
-    //  //membuat token JWT
-    // const accessToken = jwt.sign({ id: user.id, email: user.email }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: process.env.EXPIRED_TOKEN });
-
-    // const refreshToken = jwt.sign({ id: user.id, email: user.email }, process.env.REFRESH_TOKEN_SECRET, { expiresIn: process.env.EXPIRED_REFRESH_TOKEN });
-
-    // // Update refresh_token di database
-    // await db.query('UPDATE users SET refresh_token = ? WHERE id = ?', [refreshToken, user.id]);
-
-
     return h.response({ 
       status:'success',
       message: 'Login berhasil',
