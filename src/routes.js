@@ -3,7 +3,7 @@ import register  from './handlers/register.js';
 import validateToken from './middleware/validateToken.js';
 import {validateRegister, registerSchema}  from './middleware/validateRegister.js';
 import { loginSchema, validateLogin } from './middleware/validateLogin.js';
-import refreshToken from './handlers/refreshToken.js';
+// import refreshToken from './handlers/refreshToken.js';
 import getUser from './handlers/getUser.js';
 import { updateProfile } from './handlers/updateProfile.js';
 import { updatePassword } from './handlers/updatePassword.js';
@@ -61,11 +61,11 @@ const routes = [
     },
     handler: updatePassword, // Menggabungkan validasi untuk update password
   },
-  {
-    method:'GET',
-    path:'/token',
-    handler:refreshToken
-  },
+  // {
+  //   method:'GET',
+  //   path:'/token',
+  //   handler:refreshToken
+  // },
   {
     method:'GET',
     path:'/profile',
@@ -78,7 +78,7 @@ const routes = [
     method:'GET',
     path:'/logout',
     options:{
-      pre:[{method: validateLogin}]
+      pre:[{method: validateToken}]
     },
     handler:logout
   },

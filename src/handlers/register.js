@@ -9,11 +9,16 @@ const register = async (request, h) => {
     //cek email apakah sudah ada?
     const [existingUser] = await db.query('SELECT * FROM users WHERE email = ?', [email]);
     if (existingUser.length > 0) {
-      return h.response({ errors: {
-          email :[
-            'Email sudah terdaftar'
-          ]
-        }
+      return h.response({ 
+        status:'fail',
+        message:{
+          errors: {
+             email :[
+               'Email sudah terdaftar'
+            ]
+          }
+        },
+        data:null
       }).code(400);
     }
 
@@ -30,14 +35,18 @@ const register = async (request, h) => {
       [nama, email, null, null, null, null, hashedPassword]
     );
 
-    return h.response({ message: 'User berhasil terdaftar' }).code(201);
+    return h.response({ 
+      status:'succcess',
+      message: 'User berhasil terdaftar',
+      data:null
+     }).code(201);
   } catch (error) {
     console.error(error);
-    return h.response({ errors:{
-      server:[
-        'Internal server error'
-      ]
-    }}).code(500);
+    return h.response({
+      status:'fail',
+      message:'Internal Server Error',
+      data:null
+    }).code(500);
   }
 };
 

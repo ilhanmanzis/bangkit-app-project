@@ -14,7 +14,11 @@ export const validateRegister = (schema) => {
         return acc;
       }, {});
 
-      return h.response({ errors: errorMessage }).code(400).takeover();
+      return h.response({ 
+        status: 'fail',
+        message:{errors: errorMessage },
+        data:null
+      }).code(400).takeover();
     }
     return h.continue;
   };
