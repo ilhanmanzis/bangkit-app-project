@@ -10,21 +10,31 @@ export const updatePassword = async (request, h) => {
     const [rows] = await db.query('SELECT * FROM users WHERE id = ?', [id]);
     if (rows.length === 0) {
       return h.response({ 
-        request_id:id,
-        errors: {
+        status:'fail',
+        message:{
+          errors: {
             id:[
-                'User not found'
-            ]
-      }}).code(404);
+                    'User tidak ditemukan'
+                ]
+          }
+        },
+        data:null
+      }).code(404);
     }
 
     const user = rows[0];
     const isMatch = await bcrypt.compare(oldPassword, user.password);
 
     if (!isMatch) {
-      return h.response({ errors: {
-        password:['Password Salah']
-      } }).code(401);
+      return h.response({ 
+        status:'fail',
+        message:{
+          errors: {
+            oldPassword:['Password lama salah']
+          }
+        },
+        data:null
+      }).code(401);
     }
 
      //membuat enkripsi password
@@ -32,13 +42,17 @@ export const updatePassword = async (request, h) => {
     const hashedNewPassword = await bcrypt.hash(newPassword, salt); // Enkripsi password baru
     await db.query('UPDATE users SET password = ? WHERE id = ?', [hashedNewPassword, id]);
 
-    return h.response({ message: 'Password updated successfully' }).code(200);
+    return h.response({ 
+      status:'success',
+      message: 'Password berhasil diubah',
+      data:null 
+    }).code(200);
   } catch (error) {
     console.error(error);
-        return h.response({ errors:{
-            server:[
-                'Internal server error'
-            ]
-        }}).code(500);
+    return h.response({
+        status:'fail',
+        message:'Internal Server Error',
+        data:null
+    }).code(500);
   }
 };

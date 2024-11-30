@@ -7,20 +7,27 @@ const getUser = async(request, h) =>{
        // Periksa apakah pengguna dengan ID yang diberikan ada
     const [rows] = await db.query('SELECT * FROM users WHERE id = ?', [id]);
     if (rows.length === 0) {
-      return h.response({ 
-        request_id:id,
-        errors: {
-            id:[
-                'User not found'
-            ]
-      }}).code(404);
+      return h.response({
+        status:'fail' ,
+        message:{
+            errors: {
+                id:[
+                    'User tidak ditemukan'
+                ]
+            }
+        },
+        data:{
+            request_id:id,
+        }
+        }).code(404);
     }
 
     const user = rows[0];
      // Format respons dengan data pengguna
 
     return h.response({
-        message:"success",
+        status:'success',
+        message:null,
         data: {
             id: user.id,
             nama: user.nama,
@@ -33,11 +40,11 @@ const getUser = async(request, h) =>{
     }).code(200);
     } catch (error) {
         console.error(error);
-        return h.response({ errors:{
-            server:[
-                'Internal server error'
-            ]
-        }}).code(500);
+        return h.response({
+            status:'fail',
+            message:'Internal Server Error',
+            data:null
+        }).code(500);
     }
 };
 

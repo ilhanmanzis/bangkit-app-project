@@ -9,24 +9,34 @@ export const updateProfile = async (request, h) => {
     const [rows] = await db.query('SELECT * FROM users WHERE id = ?', [id]);
     if (rows.length === 0) {
       return h.response({ 
-        request_id:id,
-        errors: {
+        status:'fail',
+        message:{
+          errors: {
             id:[
-                'User not found'
-            ]
-      }}).code(404);
+                    'User tidak ditemukan'
+                ]
+          }
+        },
+        data:null
+      }).code(404);
     }
 
     // Periksa apakah email sudah digunakan oleh pengguna lain
     const [emailCheck] = await db.query('SELECT * FROM users WHERE email = ? AND id != ?', [email, id]);
     if (emailCheck.length > 0) {
       return h.response({ 
-        request_email:email,
-        errors: {
+        status:'fail',
+        message:{
+          errors: {
             email:[
-                'Email is already in use by another user'
+                'Email sudah digunakan'
             ]
-      }}).code(400);
+          }
+        },
+        data:{
+          request_email:email,
+        }
+      }).code(400);
     }
 
     // Update profil pengguna
@@ -37,13 +47,17 @@ export const updateProfile = async (request, h) => {
       [nama, email, jenisKelamin, tanggalLahir, beratBadan, tinggiBadan, id]
     );
 
-    return h.response({ message: 'Profile updated successfully' }).code(200);
+    return h.response({ 
+      status:'success',
+      message: 'Profile user berhasil diperbarui' ,
+      data:null
+    }).code(200);
   } catch (error) {
     console.error(error);
-        return h.response({ errors:{
-            server:[
-                'Internal server error'
-            ]
-        }}).code(500);
+    return h.response({
+        status:'fail',
+        message:'Internal Server Error',
+        data:null
+    }).code(500);
   }
 };
