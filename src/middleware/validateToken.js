@@ -26,6 +26,18 @@ const validateToken = async (request, h) => {
 
     return h.continue;
   } catch (err) {
+    if (err.name === 'TokenExpiredError') {
+      return h.response({
+        status:'fail',
+        message:{
+          errors:{
+            token:[
+              'Token has expired'
+            ]
+          }  
+        } 
+      }).code(401).takeover();
+    }
     return h.response({ 
       status:'fail',
       message:{
