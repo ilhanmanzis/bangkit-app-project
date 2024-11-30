@@ -3,12 +3,13 @@ import register  from './handlers/register.js';
 import validateToken from './middleware/validateToken.js';
 import {validateRegister, registerSchema}  from './middleware/validateRegister.js';
 import { loginSchema, validateLogin } from './middleware/validateLogin.js';
-import refreshToken from './handlers/refreshToken.js';
+// import refreshToken from './handlers/refreshToken.js';
 import getUser from './handlers/getUser.js';
 import { updateProfile } from './handlers/updateProfile.js';
 import { updatePassword } from './handlers/updatePassword.js';
 import { profileSchema, validateProfile } from './middleware/validateProfile.js';
 import { passwordSchema, validateUpdatePassword } from './middleware/validateUpdatePassword.js';
+import logout from './handlers/logout.js';
 
 
 const routes = [
@@ -62,16 +63,19 @@ const routes = [
   },
   {
     method:'GET',
-    path:'/token',
-    handler:refreshToken
-  },
-  {
-    method:'GET',
     path:'/profile',
     options: {
       pre: [{ method: validateToken }],
     },
     handler:getUser
+  },
+  {
+    method:'GET',
+    path:'/logout',
+    options:{
+      pre:[{method: validateToken}]
+    },
+    handler:logout
   },
 ];
 
