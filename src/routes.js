@@ -3,7 +3,6 @@ import register  from './handlers/register.js';
 import validateToken from './middleware/validateToken.js';
 import {validateRegister, registerSchema}  from './middleware/validateRegister.js';
 import { loginSchema, validateLogin } from './middleware/validateLogin.js';
-// import refreshToken from './handlers/refreshToken.js';
 import getUser from './handlers/getUser.js';
 import { updateProfile } from './handlers/updateProfile.js';
 import { updatePassword } from './handlers/updatePassword.js';
