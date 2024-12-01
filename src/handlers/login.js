@@ -46,15 +46,11 @@ const login = async (request, h) => {
       status:'success',
       message: 'Login berhasil',
       data:{
+        id:user.id,
+        nama:user.nama,
         token,
       } 
     });
-    // .state('refreshToken', token, {
-    //     //isSecure: true, // Gunakan true untuk HTTPS
-    //     httpOnly: true, // Mencegah akses dari JavaScript
-    //     path: '/', // Berlaku untuk seluruh domain
-    //     ttl: 24 * 60 * 60 * 1000, // 1 hari dalam milidetik
-    // });
     
 
   } catch (error) {
