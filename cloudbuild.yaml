@@ -1,3 +1,6 @@
+options:
+  logging: CLOUD_LOGGING_ONLY
+
 steps:
   # 1. Build Docker image
   - name: 'gcr.io/cloud-builders/docker'
@@ -24,7 +27,7 @@ steps:
       - '-c'
       - |
         gcloud run deploy ideat-api \
-          --image=gcr.io/$PROJECT_ID/ideat-api\
+          --image=gcr.io/$PROJECT_ID/ideat-api \
           --platform=managed \
           --region=asia-southeast2 \
           --allow-unauthenticated \
@@ -36,8 +39,7 @@ steps:
           --set-secrets DB_NAME=env-file:DB_NAME \
           --set-secrets ACCESS_TOKEN_SECRET=env-file:ACCESS_TOKEN_SECRET \
           --set-secrets MODEL_URL=env-file:MODEL_URL \
-          --set-secrets BUCKET_NAME=env-file:BUCKET_NAME \
-          # Tambahkan semua environment variables yang dibutuhkan.
+          --set-secrets BUCKET_NAME=env-file:BUCKET_NAME
 
 images:
   - gcr.io/$PROJECT_ID/ideat-api
