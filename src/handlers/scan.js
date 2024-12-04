@@ -52,7 +52,6 @@ const scan = async(request, h)=>{
 
         //mengubah nama makanan sesuai EYD
         const namaMakanan = await renameMakanan(hasil.model_prediction);
-        console.log('Nama makanan:', namaMakanan);
 
 
         if (!namaMakanan) {

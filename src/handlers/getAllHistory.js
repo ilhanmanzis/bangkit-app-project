@@ -14,7 +14,7 @@ const getAllHistory = async(request, h)=>{
             status:'fail',
             message:'data history tidak ditemukan',
             data:[]
-        }).code(200);
+        }).code(404);
     }
 
     // Memproses data menjadi array
