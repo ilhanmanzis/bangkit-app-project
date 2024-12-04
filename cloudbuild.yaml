@@ -1,66 +1,43 @@
 steps:
-  # Step 1: Ambil Secret dari Secret Manager
-  - name: "gcr.io/cloud-builders/gcloud"
-    entrypoint: "bash"
+  # 1. Build Docker image
+  - name: 'gcr.io/cloud-builders/docker'
     args:
-      - "-c"
+      [
+        'build',
+        '-t',
+        'gcr.io/$PROJECT_ID/ideat-api',
+        '.'
+      ]
+
+  # 2. Push Docker image to Container Registry
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      [
+        'push',
+        'gcr.io/$PROJECT_ID/ideat-api'
+      ]
+
+  # 3. Deploy to Cloud Run
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk:slim'
+    entrypoint: 'bash'
+    args:
+      - '-c'
       - |
-        echo "$(gcloud secrets versions access latest --secret=env-file)" > .env
+        gcloud run deploy ideat-api \
+          --image=gcr.io/$PROJECT_ID/ideat-api\
+          --platform=managed \
+          --region=asia-southeast2 \
+          --allow-unauthenticated \
+          --set-secrets PORT=env-file:PORT \
+          --set-secrets NODE_ENV=env-file:NODE_ENV \
+          --set-secrets DB_HOST=env-file:DB_HOST \
+          --set-secrets DB_USER=env-file:DB_USER \
+          --set-secrets DB_PASSWORD=env-file:DB_PASSWORD \
+          --set-secrets DB_NAME=env-file:DB_NAME \
+          --set-secrets ACCESS_TOKEN_SECRET=env-file:ACCESS_TOKEN_SECRET \
+          --set-secrets MODEL_URL=env-file:MODEL_URL \
+          --set-secrets BUCKET_NAME=env-file:BUCKET_NAME \
+          # Tambahkan semua environment variables yang dibutuhkan.
 
-  # Step 2: Konversi .env ke env.yaml
-  - name: "ubuntu"
-    entrypoint: "bash"
-    args:
-      - "-c"
-      - |
-        echo "env_vars:" > env.yaml
-        while IFS='=' read -r key value; do
-          if [[ ! -z "$key" && ! "$key" =~ ^# && ! -z "$value" ]]; then
-            echo "  $key: \"$value\"" >> env.yaml
-          fi
-        done < .env
-
-  # Step 3: Validasi env.yaml
-  - name: "ubuntu"
-    entrypoint: "bash"
-    args:
-      - "-c"
-      - |
-        if grep -q ": null$" env.yaml || grep -q ": $''" env.yaml; then
-          echo "Error: env.yaml contains invalid values (null or empty)"
-          exit 1
-        fi
-
-  # Step 4: Build Docker Image
-  - name: "gcr.io/cloud-builders/docker"
-    args:
-      - "build"
-      - "-t"
-      - "gcr.io/$PROJECT_ID/ideat-api"
-      - "."
-
-  # Step 5: Push Docker Image
-  - name: "gcr.io/cloud-builders/docker"
-    args:
-      - "push"
-      - "gcr.io/$PROJECT_ID/ideat-api"
-
-  # Step 6: Deploy ke Cloud Run
-  - name: "gcr.io/cloud-builders/gcloud"
-    args:
-      - "run"
-      - "deploy"
-      - "ideat-api"
-      - "--image=gcr.io/$PROJECT_ID/ideat-api"
-      - "--region=asia-southeast2"
-      - "--platform=managed"
-      - "--allow-unauthenticated"
-      - "--env-vars-file=env.yaml"
-
-substitutions:
-  _PROJECT_ID: "divine-cortex-443408-j1"
-
-timeout: "900s"
-
-options:
-  logging: CLOUD_LOGGING_ONLY
+images:
+  - gcr.io/$PROJECT_ID/ideat-api
