@@ -28,7 +28,7 @@ steps:
       - "deploy"
       - "ideat-api"
       - "--image=gcr.io/$PROJECT_ID/ideat-api"
-      - "--region=us-central1"
+      - "--region=asia-southeast2"
       - "--platform=managed"
       - "--allow-unauthenticated"
       - "--env-vars-file=.env"
@@ -40,4 +40,3 @@ timeout: "900s"
 
 options:
   logging: CLOUD_LOGGING_ONLY
-  region: us-central1
