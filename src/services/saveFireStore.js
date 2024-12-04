@@ -7,11 +7,11 @@ async function store_data(idUser, idHistory, historyData) {
 
          // Koleksi "users"
         const userCollection = dbf.collection('users');
-        console.log('Collection users tersedia.');
+        //console.log('Collection users tersedia.');
 
         // Dokumen user berdasarkan idUser
         const userDoc = userCollection.doc(idUser);
-        console.log(`Dokumen untuk user ${idUser} tersedia.`);
+        //console.log(`Dokumen untuk user ${idUser} tersedia.`);
 
         // Subcollection "history"
         const historyCollection = userDoc.collection('history');
@@ -19,7 +19,7 @@ async function store_data(idUser, idHistory, historyData) {
 
         // Menyimpan data ke Firestore
         await historyDoc.set(historyData);
-        console.log(`Data history dengan ID ${idHistory} berhasil ditambahkan.`);
+        //console.log(`Data history dengan ID ${idHistory} berhasil ditambahkan.`);
     } catch (error) {
         console.error("Error saat menyimpan data:", error.message);
     }

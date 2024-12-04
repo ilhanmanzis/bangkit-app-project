@@ -6,6 +6,7 @@ import predictModel from "../services/predictModel.js";
 import { nanoid } from "nanoid";
 import getCurrentDate from "../services/currentDate.js";
 import store_data from "../services/saveFireStore.js";
+import renameMakanan from "../services/renameMakanan.js";
 
 
 
@@ -49,18 +50,22 @@ const scan = async(request, h)=>{
         //prediksi ke model
         const hasil = await predictModel(image, base64Image);
 
+        //mengubah nama makanan sesuai EYD
+        const namaMakanan = renameMakanan(hasil.model_prediction);
+
         const bucket = await getOrCreateBucket(bucketName);
 
 
         // Upload gambar ke Google Cloud Storage
         const fileUrl = await upload(image.path, bucket, request.user.id, imageName);
         const today = getCurrentDate();
-        const idHistory = nanoid(8);
+        const idHistory = nanoid(12);
         //menyimpan data ke firestore
         const historyData = {
             id_history:idHistory,
-            makanan:hasil.model_prediction,
+            makanan:namaMakanan,
             kalori:hasil.calories,
+            confidence_score: hasil.confidence_score,
             tanggal: today,
             image: fileUrl,
         };
@@ -69,11 +74,12 @@ const scan = async(request, h)=>{
 
         // Hapus file sementara setelah diproses
         fs.unlinkSync(image.path);
+        
         return h.response({
             status: 'success',
             message:'Gambar Berhasil Diprediksi',
             data:{
-                makanan: hasil.model_prediction,
+                makanan: namaMakanan,
                 kalori: hasil.calories,
                 confidence_score: hasil.confidence_score,
                 image: fileUrl
