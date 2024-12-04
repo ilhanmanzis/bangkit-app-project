@@ -1,5 +1,5 @@
 steps:
-  # Step 1: Akses Secret dari Secret Manager dan simpan ke file .env
+  # Step 1: Ambil Secret dari Secret Manager
   - name: "gcr.io/cloud-builders/gcloud"
     entrypoint: "bash"
     args:
@@ -7,7 +7,7 @@ steps:
       - |
         echo "$(gcloud secrets versions access latest --secret=env-file)" > .env
 
-  # Step 2: Konversi file .env ke env.yaml
+  # Step 2: Konversi .env ke env.yaml
   - name: "ubuntu"
     entrypoint: "bash"
     args:
@@ -26,12 +26,12 @@ steps:
     args:
       - "-c"
       - |
-        if grep -q ": null$" env.yaml; then
-          echo "Error: env.yaml contains null values"
+        if grep -q ": null$" env.yaml || grep -q ": $''" env.yaml; then
+          echo "Error: env.yaml contains invalid values (null or empty)"
           exit 1
         fi
 
-  # Step 4: Build Docker image
+  # Step 4: Build Docker Image
   - name: "gcr.io/cloud-builders/docker"
     args:
       - "build"
@@ -39,13 +39,13 @@ steps:
       - "gcr.io/$PROJECT_ID/ideat-api"
       - "."
 
-  # Step 5: Push Docker image ke Container Registry
+  # Step 5: Push Docker Image
   - name: "gcr.io/cloud-builders/docker"
     args:
       - "push"
       - "gcr.io/$PROJECT_ID/ideat-api"
 
-  # Step 6: Deploy ke Cloud Run dengan env.yaml
+  # Step 6: Deploy ke Cloud Run
   - name: "gcr.io/cloud-builders/gcloud"
     args:
       - "run"
