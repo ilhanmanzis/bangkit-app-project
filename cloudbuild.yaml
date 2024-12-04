@@ -40,9 +40,3 @@ timeout: "900s"
 
 options:
   logging: CLOUD_LOGGING_ONLY
-
-# Menambahkan akses secret
-secretManager:
-  - secret: "env-file"
-    versions: ["latest"]
-    env: "MY_ENV_VARS_SECRET"
