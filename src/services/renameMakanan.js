@@ -8,7 +8,6 @@ const renameMakanan = async(makanan)=>{
     
     // Jika ditemukan, kembalikan nilai dari array `nama`, jika tidak kembalikan null
     if (index !== -1) {
-        console.log(nama[index]);
         return nama[index];
     } else {
         return null; // Atau Anda bisa mengembalikan pesan default seperti 'Makanan tidak ditemukan'

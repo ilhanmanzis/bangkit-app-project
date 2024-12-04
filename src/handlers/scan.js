@@ -51,7 +51,7 @@ const scan = async(request, h)=>{
         const hasil = await predictModel(image, base64Image);
 
         //mengubah nama makanan sesuai EYD
-        const namaMakanan = renameMakanan(hasil.model_prediction);
+        const namaMakanan = await renameMakanan(hasil.model_prediction);
 
         const bucket = await getOrCreateBucket(bucketName);
 
