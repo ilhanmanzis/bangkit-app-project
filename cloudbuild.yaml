@@ -15,7 +15,9 @@ steps:
       - |
         echo "env_vars:" > env.yaml
         while IFS='=' read -r key value; do
-          if [[ ! -z "$key" && ! -z "$value" && ! "$key" =~ ^# ]]; then
+          # Mengabaikan baris yang kosong atau komentar (#)
+          if [[ ! -z "$key" && ! "$key" =~ ^# && ! -z "$value" ]]; then
+            # Menambahkan key-value ke file YAML
             echo "  $key: \"$value\"" >> env.yaml
           fi
         done < .env
