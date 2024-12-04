@@ -12,14 +12,14 @@ steps:
     args:
       - "build"
       - "-t"
-      - "gcr.io/$PROJECT_ID/ideat-api"
+      - "gcr.io/${_PROJECT_ID}/ideat-api"
       - "."
 
   # Step 3: Push Docker image ke Container Registry
   - name: "gcr.io/cloud-builders/docker"
     args:
       - "push"
-      - "gcr.io/$PROJECT_ID/ideat-api"
+      - "gcr.io/${_PROJECT_ID}/ideat-api"
 
   # Step 4: Deploy ke Cloud Run dengan file .env
   - name: "gcr.io/cloud-builders/gcloud"
@@ -27,8 +27,8 @@ steps:
       - "run"
       - "deploy"
       - "ideat-api"
-      - "--image=gcr.io/$PROJECT_ID/ideat-api"
-      - "--region=asia-southeast2"
+      - "--image=gcr.io/${_PROJECT_ID}/ideat-api"
+      - "--region=us-central1"
       - "--platform=managed"
       - "--allow-unauthenticated"
       - "--env-vars-file=.env"
