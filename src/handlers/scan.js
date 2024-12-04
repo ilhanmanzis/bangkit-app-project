@@ -14,7 +14,13 @@ const scan = async(request, h)=>{
     const imageName = image.filename;
     console.log('request.payload:', imageName);
     if (!image) {
-        return h.response({ message: 'image tidak ditemukan' }).code(400);
+        return h.response({
+            status: 'fail',
+            message: {
+                errors:{image:['image tidak ditemukan']}
+            },
+            data:null
+        }).code(400);
     }
     
     
