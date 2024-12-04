@@ -2,7 +2,7 @@ import { Firestore } from "@google-cloud/firestore";
 
 const dbf = new Firestore();
 const getAllHistory = async(request, h)=>{
-    const {id} = request.user;
+    const id = `${request.user.id}`;
 
     try {
         const historyCollection = dbf.collection('users').doc(id).collection('history');
