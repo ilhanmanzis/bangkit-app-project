@@ -21,7 +21,6 @@ const getAllHistory = async(request, h)=>{
         const histories = [];
         snapshot.forEach(doc => {
             histories.push({
-                id: doc.id, // ID dokumen
                 ...doc.data(), // Data dokumen
             });
         });
