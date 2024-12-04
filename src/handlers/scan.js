@@ -52,6 +52,18 @@ const scan = async(request, h)=>{
 
         //mengubah nama makanan sesuai EYD
         const namaMakanan = await renameMakanan(hasil.model_prediction);
+        console.log('Nama makanan:', namaMakanan);
+
+
+        if (!namaMakanan) {
+            return h.response({
+                status: 'fail',
+                message: {
+                    errors: { makanan: ['Makanan tidak dikenali.'] }
+                },
+                data: null
+            }).code(400); 
+        }
 
         const bucket = await getOrCreateBucket(bucketName);
 
