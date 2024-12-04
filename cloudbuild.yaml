@@ -21,13 +21,17 @@ steps:
           --platform=managed \
           --region=asia-southeast2 \
           --allow-unauthenticated \
-          --set-secrets DB_HOST=env-file:DB_HOST \
-          --set-secrets DB_USER=env-file:DB_USER \
-          --set-secrets DB_PASSWORD=env-file:DB_PASSWORD \
-          --set-secrets DB_NAME=env-file:DB_NAME \
-          --set-secrets ACCESS_TOKEN_SECRET=env-file:ACCESS_TOKEN_SECRET \
-          --set-secrets MODEL_URL=env-file:MODEL_URL \
-          --set-secrets BUCKET_NAME=env-file:BUCKET_NAME
+      - '--set-env-vars'
+      - |
+        PORT=${_PORT},
+        NODE_ENV=${_NODE_ENV},
+        DB_HOST=${_DB_HOST},
+        DB_USER=${_DB_USER},
+        DB_PASSWORD=${_DB_PASSWORD},
+        DB_NAME=${_DB_NAME},
+        ACCESS_TOKEN_SECRET=${_ACCESS_TOKEN_SECRET},
+        MODEL_URL=${_MODEL_URL},
+        BUCKET_NAME=${_BUCKET_NAME}
 
 images:
   - gcr.io/$PROJECT_ID/ideat-api
