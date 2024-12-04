@@ -56,3 +56,11 @@ steps:
       - "--platform=managed"
       - "--allow-unauthenticated"
       - "--env-vars-file=env.yaml"
+
+substitutions:
+  _PROJECT_ID: "divine-cortex-443408-j1"
+
+timeout: "900s"
+
+options:
+  logging: CLOUD_LOGGING_ONLY
