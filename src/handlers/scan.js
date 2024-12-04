@@ -3,6 +3,9 @@ import fs from "fs";
 import path from "path";
 import {getOrCreateBucket, upload} from "../services/upload.js";
 import predictModel from "../services/predictModel.js";
+import { nanoid } from "nanoid";
+import getCurrentDate from "../services/currentDate.js";
+import store_data from "../services/saveFireStore.js";
 
 
 
@@ -45,6 +48,18 @@ const scan = async(request, h)=>{
 
         // Upload gambar ke Google Cloud Storage
         const fileUrl = await upload(image.path, bucket, request.user.id, imageName);
+        const today = getCurrentDate();
+        const idHistory = nanoid(8);
+        //menyimpan data ke firestore
+        const historyData = {
+            id_history:idHistory,
+            makanan:hasil.model_prediction,
+            kalori:hasil.calories,
+            tanggal: today,
+            image: fileUrl,
+        };
+
+        await store_data(`${request.user.id}`, idHistory, historyData);
 
         // Hapus file sementara setelah diproses
         fs.unlinkSync(image.path);
