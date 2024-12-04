@@ -7,7 +7,20 @@ steps:
       - |
         echo "$(gcloud secrets versions access latest --secret=env-file)" > .env
 
-  # Step 2: Build Docker image dan sertakan file .env
+  # Step 2: Konversi file .env ke file env.yaml
+  - name: "ubuntu"
+    entrypoint: "bash"
+    args:
+      - "-c"
+      - |
+        echo "env_vars:" > env.yaml
+        while IFS='=' read -r key value; do
+          if [[ ! -z "$key" && ! -z "$value" && ! "$key" =~ ^# ]]; then
+            echo "  $key: \"$value\"" >> env.yaml
+          fi
+        done < .env
+
+  # Step 3: Build Docker image dan sertakan file .env
   - name: "gcr.io/cloud-builders/docker"
     args:
       - "build"
@@ -15,13 +28,13 @@ steps:
       - "gcr.io/$PROJECT_ID/ideat-api"
       - "."
 
-  # Step 3: Push Docker image ke Container Registry
+  # Step 4: Push Docker image ke Container Registry
   - name: "gcr.io/cloud-builders/docker"
     args:
       - "push"
       - "gcr.io/$PROJECT_ID/ideat-api"
 
-  # Step 4: Deploy ke Cloud Run dengan file .env
+  # Step 5: Deploy ke Cloud Run dengan file env.yaml
   - name: "gcr.io/cloud-builders/gcloud"
     args:
       - "run"
@@ -31,7 +44,7 @@ steps:
       - "--region=asia-southeast2"
       - "--platform=managed"
       - "--allow-unauthenticated"
-      - "--env-vars-file=.env"
+      - "--env-vars-file=env.yaml"
 
 substitutions:
   _PROJECT_ID: "divine-cortex-443408-j1"
