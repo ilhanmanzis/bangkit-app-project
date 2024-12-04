@@ -5,10 +5,10 @@ const renameMakanan = async(makanan)=>{
         
     // Cari index dari `makanan` di array class_labels
     const index = class_labels.indexOf(makanan);
-    console.log(nama[index]);
-
+    
     // Jika ditemukan, kembalikan nilai dari array `nama`, jika tidak kembalikan null
     if (index !== -1) {
+        console.log(nama[index]);
         return nama[index];
     } else {
         return null; // Atau Anda bisa mengembalikan pesan default seperti 'Makanan tidak ditemukan'
