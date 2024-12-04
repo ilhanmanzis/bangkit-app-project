@@ -31,7 +31,6 @@ steps:
           --platform=managed \
           --region=asia-southeast2 \
           --allow-unauthenticated \
-          --set-secrets PORT=env-file:PORT \
           --set-secrets NODE_ENV=env-file:NODE_ENV \
           --set-secrets DB_HOST=env-file:DB_HOST \
           --set-secrets DB_USER=env-file:DB_USER \
