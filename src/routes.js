@@ -9,6 +9,7 @@ import { updatePassword } from './handlers/updatePassword.js';
 import { profileSchema, validateProfile } from './middleware/validateProfile.js';
 import { passwordSchema, validateUpdatePassword } from './middleware/validateUpdatePassword.js';
 import logout from './handlers/logout.js';
+import scan from './handlers/scan.js';
 
 
 const routes = [
@@ -76,6 +77,22 @@ const routes = [
     },
     handler:logout
   },
+  {
+    method:'POST',
+    path:'/scan',
+    handler:scan,
+    options:{
+      pre:[{method: validateToken}],
+      payload: {
+          allow: 'multipart/form-data',
+          multipart: true,
+          output: 'file', // Output sebagai file
+          parse: true, // Parsing otomatis
+          maxBytes: 5 * 1024 * 1024, // Maksimal ukuran file (5MB)
+
+      },
+    }
+  }
 ];
 
 export default routes;
