@@ -7,7 +7,7 @@ steps:
       - |
         echo "$(gcloud secrets versions access latest --secret=env-file)" > .env
 
-  # Step 2: Konversi file .env ke file env.yaml
+  # Step 2: Konversi file .env ke env.yaml
   - name: "ubuntu"
     entrypoint: "bash"
     args:
@@ -15,14 +15,23 @@ steps:
       - |
         echo "env_vars:" > env.yaml
         while IFS='=' read -r key value; do
-          # Mengabaikan baris yang kosong atau komentar (#)
           if [[ ! -z "$key" && ! "$key" =~ ^# && ! -z "$value" ]]; then
-            # Menambahkan key-value ke file YAML
             echo "  $key: \"$value\"" >> env.yaml
           fi
         done < .env
 
-  # Step 3: Build Docker image dan sertakan file .env
+  # Step 3: Validasi env.yaml
+  - name: "ubuntu"
+    entrypoint: "bash"
+    args:
+      - "-c"
+      - |
+        if grep -q ": null$" env.yaml; then
+          echo "Error: env.yaml contains null values"
+          exit 1
+        fi
+
+  # Step 4: Build Docker image
   - name: "gcr.io/cloud-builders/docker"
     args:
       - "build"
@@ -30,13 +39,13 @@ steps:
       - "gcr.io/$PROJECT_ID/ideat-api"
       - "."
 
-  # Step 4: Push Docker image ke Container Registry
+  # Step 5: Push Docker image ke Container Registry
   - name: "gcr.io/cloud-builders/docker"
     args:
       - "push"
       - "gcr.io/$PROJECT_ID/ideat-api"
 
-  # Step 5: Deploy ke Cloud Run dengan file env.yaml
+  # Step 6: Deploy ke Cloud Run dengan env.yaml
   - name: "gcr.io/cloud-builders/gcloud"
     args:
       - "run"
@@ -47,11 +56,3 @@ steps:
       - "--platform=managed"
       - "--allow-unauthenticated"
       - "--env-vars-file=env.yaml"
-
-substitutions:
-  _PROJECT_ID: "divine-cortex-443408-j1"
-
-timeout: "900s"
-
-options:
-  logging: CLOUD_LOGGING_ONLY
