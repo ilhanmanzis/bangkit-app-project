@@ -3,35 +3,24 @@ options:
 
 steps:
   # 1. Build Docker image
-  - name: 'gcr.io/cloud-builders/docker'
-    args:
-      [
-        'build',
-        '-t',
-        'gcr.io/$PROJECT_ID/ideat-api',
-        '.'
-      ]
+  - name: "gcr.io/cloud-builders/docker"
+    args: ["build", "-t", "gcr.io/$PROJECT_ID/ideat-api", "."]
 
   # 2. Push Docker image to Container Registry
-  - name: 'gcr.io/cloud-builders/docker'
-    args:
-      [
-        'push',
-        'gcr.io/$PROJECT_ID/ideat-api'
-      ]
+  - name: "gcr.io/cloud-builders/docker"
+    args: ["push", "gcr.io/$PROJECT_ID/ideat-api"]
 
   # 3. Deploy to Cloud Run
-  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk:slim'
-    entrypoint: 'bash'
+  - name: "gcr.io/google.com/cloudsdktool/cloud-sdk:slim"
+    entrypoint: "bash"
     args:
-      - '-c'
+      - "-c"
       - |
         gcloud run deploy ideat-api \
           --image=gcr.io/$PROJECT_ID/ideat-api \
           --platform=managed \
           --region=asia-southeast2 \
           --allow-unauthenticated \
-          --set-secrets NODE_ENV=env-file:NODE_ENV \
           --set-secrets DB_HOST=env-file:DB_HOST \
           --set-secrets DB_USER=env-file:DB_USER \
           --set-secrets DB_PASSWORD=env-file:DB_PASSWORD \
