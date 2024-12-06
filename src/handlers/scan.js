@@ -13,7 +13,17 @@ import crypto from "crypto";
 
 
 const scan = async(request, h)=>{
-    const { image } = request.payload;
+    const { photo } = request.payload;
+    const image = photo;
+    if (!image) {
+        return h.response({
+            status: 'fail',
+            message: {
+                errors:{image:['image tidak ditemukan']}
+            },
+            data:null
+        }).code(400);
+    }
     let imageName;
 
     if(image.filename){
@@ -25,15 +35,7 @@ const scan = async(request, h)=>{
     }
 
     console.log('request.payload:', imageName);
-    if (!image) {
-        return h.response({
-            status: 'fail',
-            message: {
-                errors:{image:['image tidak ditemukan']}
-            },
-            data:null
-        }).code(400);
-    }
+    
     
     
     //nama bucket
