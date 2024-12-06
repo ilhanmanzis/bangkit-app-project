@@ -10,7 +10,7 @@ const createUsersTable = async () => {
       tanggal_lahir DATE DEFAULT NULL,
       berat_badan INT DEFAULT NULL,
       tinggi_badan INT DEFAULT NULL,
-      password VARCHAR(255) NOT NULL,
+      password VARCHAR(255) NOT NULL
     );
   `;
 
