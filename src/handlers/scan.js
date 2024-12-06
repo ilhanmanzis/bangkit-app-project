@@ -8,6 +8,8 @@ import getCurrentDate from "../services/currentDate.js";
 import store_data from "../services/saveFireStore.js";
 import renameMakanan from "../services/renameMakanan.js";
 
+import crypto from "crypto";
+
 
 
 const scan = async(request, h)=>{
