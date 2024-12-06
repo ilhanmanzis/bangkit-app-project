@@ -16,7 +16,7 @@ const scan = async(request, h)=>{
     const { image } = request.payload;
     let imageName;
 
-    if(!image.filename){
+    if(image.filename){
         imageName = image.filename
     }else{
         imageName = crypto.randomBytes(Math.ceil(length / 2)) // Menghasilkan byte random
