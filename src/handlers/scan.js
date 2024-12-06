@@ -12,7 +12,16 @@ import renameMakanan from "../services/renameMakanan.js";
 
 const scan = async(request, h)=>{
     const { image } = request.payload;
-    const imageName = image.filename;
+    let imageName;
+
+    if(!image.filename){
+        imageName = image.filename
+    }else{
+        imageName = crypto.randomBytes(Math.ceil(length / 2)) // Menghasilkan byte random
+        .toString('hex') // Mengubah byte menjadi string heksadesimal
+        .slice(0, length); // Memotong sesuai panjang yang diinginkan
+    }
+
     console.log('request.payload:', imageName);
     if (!image) {
         return h.response({
