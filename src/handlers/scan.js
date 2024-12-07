@@ -63,6 +63,16 @@ const scan = async(request, h)=>{
         //prediksi ke model
         const hasil = await predictModel(image, base64Image);
 
+        if(hasil.confidence_score <= 10){
+            return h.response({
+                status: 'fail',
+                message: {
+                    errors: { makanan: ['Makanan tidak dikenali.'] }
+                },
+                data: null
+            }).code(400); 
+        }
+
         //mengubah nama makanan sesuai EYD
         const namaMakanan = await renameMakanan(hasil.model_prediction);
 
