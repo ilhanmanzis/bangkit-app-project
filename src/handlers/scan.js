@@ -63,7 +63,7 @@ const scan = async(request, h)=>{
         //prediksi ke model
         const hasil = await predictModel(image, base64Image);
 
-        if(hasil.confidence_score <= 10){
+        if(hasil.confidence_score < 10){
             return h.response({
                 status: 'fail',
                 message: {
