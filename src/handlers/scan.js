@@ -93,6 +93,8 @@ const scan = async(request, h)=>{
         // Upload gambar ke Google Cloud Storage
         const fileUrl = await upload(image.path, bucket, request.user.id, imageName);
         const today = getCurrentDate();
+        const now = new Date();
+        const formattedTime = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
         const idHistory = nanoid(12);
         //menyimpan data ke firestore
         const historyData = {
@@ -101,6 +103,7 @@ const scan = async(request, h)=>{
             kalori:hasil.calories,
             confidence_score: hasil.confidence_score,
             tanggal: today,
+            jam:formattedTime,
             image: fileUrl,
         };
 
