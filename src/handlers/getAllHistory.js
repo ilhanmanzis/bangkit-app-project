@@ -7,23 +7,22 @@ const getAllHistory = async(request, h)=>{
     try {
         const historyCollection = dbf.collection('users').doc(id).collection('history');
 
-    const snapshot = await historyCollection.get();
-    if (snapshot.empty) {
-        console.log(`Tidak ada data history untuk user dengan ID ${id}.`);
-        return h.response({
-            status:'fail',
-            message:'data history tidak ditemukan',
-            data:[]
-        }).code(404);
-    }
+        const snapshot = await historyCollection.get();
+        if (snapshot.empty) {
+            console.log(`Tidak ada data history untuk user dengan ID ${id}.`);
+            return h.response({
+                status:'fail',
+                message:'data history tidak ditemukan',
+                data:[]
+            }).code(404);
+        }
 
-    // Memproses data menjadi array
-        const histories = [];
-        snapshot.forEach(doc => {
-            histories.push({
-                ...doc.data(), // Data dokumen
-            });
+        // Memproses data menjadi array dengan atribut yang diperlukan saja
+        const histories = snapshot.docs.map(doc => {
+                const { id_history, makanan, kalori } = doc.data();
+                return { id_history, makanan, kalori }; // Hanya menyertakan atribut tertentu
         });
+
         return h.response({
             status:'success',
             message:'data history berhasil ditemukan',
