@@ -19,8 +19,8 @@ const getAllHistory = async(request, h)=>{
 
         // Memproses data menjadi array dengan atribut yang diperlukan saja
         const histories = snapshot.docs.map(doc => {
-                const { id_history, makanan, kalori } = doc.data();
-                return { id_history, makanan, kalori }; // Hanya menyertakan atribut tertentu
+                const { id_history, makanan, kalori, image } = doc.data();
+                return { id_history, makanan, kalori, image }; // Hanya menyertakan atribut tertentu
         });
 
         return h.response({
