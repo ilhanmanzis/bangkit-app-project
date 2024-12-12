@@ -1,0 +1,38 @@
+options:
+  logging: CLOUD_LOGGING_ONLY
+
+steps:
+  # 1. Build Docker image
+  - name: "gcr.io/cloud-builders/docker"
+    args: ["build", "-t", "gcr.io/$PROJECT_ID/ideat-api", "."]
+
+  # 2. Push Docker image to Container Registry
+  - name: "gcr.io/cloud-builders/docker"
+    args: ["push", "gcr.io/$PROJECT_ID/ideat-api"]
+
+  # 3. Deploy to Cloud Run
+  - name: "gcr.io/google.com/cloudsdktool/cloud-sdk:slim"
+    entrypoint: "bash"
+    args:
+      - "-c"
+      - |
+        gcloud run deploy ideat-api \
+          --image=gcr.io/$PROJECT_ID/ideat-api \
+          --platform=managed \
+          --region=asia-southeast2 \
+          --allow-unauthenticated \
+      - '--set-env-vars'
+      - |
+        PORT=${_PORT},
+        NODE_ENV=${_NODE_ENV},
+        DB_HOST=${_DB_HOST},
+        DB_USER=${_DB_USER},
+        DB_PASSWORD=${_DB_PASSWORD},
+        DB_NAME=${_DB_NAME},
+        ACCESS_TOKEN_SECRET=${_ACCESS_TOKEN_SECRET},
+        MODEL_URL=${_MODEL_URL},
+        BUCKET_NAME=${_BUCKET_NAME}
+
+images:
+  - gcr.io/$PROJECT_ID/ideat-api
+

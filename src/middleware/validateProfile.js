@@ -36,10 +36,6 @@ export const profileSchema = Joi.object({
       'string.min': 'Nama harus minimal 3 karakter',
       'string.pattern.name': 'Nama hanya boleh berisi huruf dan spasi',
     }),
-  email: Joi.string().email().required().messages({
-    'string.empty': 'Email tidak boleh kosong',
-    'string.email': 'Email harus dalam format yang valid',
-  }),
   jenisKelamin: Joi.string()
     .valid('Laki-laki', 'Perempuan')
     .required()

@@ -27,7 +27,7 @@ const getUser = async(request, h) =>{
 
     return h.response({
         status:'success',
-        message:null,
+        message:'Data profil berhasil didapatkan',
         data: {
             id: user.id,
             nama: user.nama,
