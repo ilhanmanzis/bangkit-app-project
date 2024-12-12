@@ -41,11 +41,11 @@ async function upload(filePath, bucket, userId, imageName){
         }
 
         await bucket.upload(filePath, optionsObject);
-        console.log(`${filePath} uploaded to ${bucket.name} bucket`);
+        //console.log(`${filePath} uploaded to ${bucket.name} bucket`);
 
          // Generate URL public
         const fileUrl = `https://storage.googleapis.com/${bucket.name}/${optionsObject.destination}`;
-        console.log(`${filePath} uploaded to ${bucket.name} bucket at ${fileUrl}`);
+        //console.log(`${filePath} uploaded to ${bucket.name} bucket at ${fileUrl}`);
         return fileUrl;
     } catch (error) {
         console.error(`Gagal mengupload ${filePath}:`, error.message);

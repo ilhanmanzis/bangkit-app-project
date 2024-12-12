@@ -10,6 +10,8 @@ import { profileSchema, validateProfile } from './middleware/validateProfile.js'
 import { passwordSchema, validateUpdatePassword } from './middleware/validateUpdatePassword.js';
 import logout from './handlers/logout.js';
 import scan from './handlers/scan.js';
+import getAllHistory from './handlers/getAllHistory.js';
+import getHistoryById from './handlers/getHistoryById.js';
 
 
 const routes = [
@@ -92,7 +94,24 @@ const routes = [
 
       },
     }
+  },
+  {
+    method:'GET',
+    path:'/historyScan',
+    handler:getAllHistory,
+    options:{
+      pre:[{method: validateToken}],
+    }
+  },
+  {
+    method:'GET',
+    path:'/historyScan/{idHistory}',
+    handler:getHistoryById,
+    options:{
+      pre:[{method: validateToken}],
+    }
   }
+  
 ];
 
 export default routes;

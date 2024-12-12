@@ -439,6 +439,77 @@ paths:
                     example: null
       security:
         - Bearer_token: []
+
+  /scan:
+    post:
+      summary: prediksi makanan
+      description: Endpoint untuk memprediksi makanan.
+      tags:
+        - Prediksi
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+      responses:
+        "200":
+          description: scan.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  message:
+                    type: string
+                    example: Gambar Berhasil Diprediksi
+                  data:
+                    type: object
+                    properties:
+                      makanan:
+                        type: string
+                      kalori:
+                        type: string
+                      image:
+                        type: string
+        "400":
+          description: Validasi input gagal.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: fail
+                  message:
+                    type: object
+                    properties:
+                      errors:
+                        type: object
+                        properties:
+                          image:
+                            type: array
+                            example:
+                              - image tidak ditemukan
+                              - Format gambar tidak valid. Hanya mendukung JPEG/PNG.
+                            makanan:
+                              type: array
+                              example:
+                                - Makanan tidak dikenali.
+                          token:
+                            type: array
+                            example:
+                              - Authorization header missing
+                              - Invalid token
+
+                  data:
+                    type: null
+                    example: null
+      security:
+        - Bearer_token: []
+
   /logout:
     get:
       summary: Logout Pengguna
@@ -493,6 +564,122 @@ paths:
                     example: null
       security:
         - Bearer_token: []
+
+  /historyScan:
+    get:
+      summary: Mendapatkan semua riwayat scan pengguna
+      description: Endpoint ini digunakan untuk mendapatkan semua riwayat scan dari pengguna yang sedang login.
+      tags:
+        - Prediksi
+      responses:
+        "200":
+          description: Data riwayat scan berhasil ditemukan.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  message:
+                    type: string
+                    example: data history berhasil ditemukan
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      example:
+                        id_history: "yyyyy"
+                        makanan: "nama makanan"
+                        kalori: "1010"
+                        tanggal: "2024-10-10"
+                        image: "https:/xxxxxx"
+
+        "404":
+          description: Data riwayat scan tidak ditemukan.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: fail
+                  message:
+                    type: string
+                    example: data history tidak ditemukan
+                  data:
+                    type: array
+                    example: []
+
+      security:
+        - BearerAuth: []
+
+  /historyScan/{idHistory}:
+    get:
+      summary: Mendapatkan detail riwayat scan berdasarkan ID
+      description: Endpoint ini digunakan untuk mendapatkan detail riwayat scan tertentu berdasarkan ID.
+      tags:
+        - Prediksi
+      parameters:
+        - in: path
+          name: idHistory
+          required: true
+          schema:
+            type: string
+          description: ID dari riwayat scan yang ingin diambil.
+      responses:
+        "200":
+          description: Detail riwayat scan berhasil ditemukan.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  message:
+                    type: string
+                    example: Data history berhasil ditemukan.
+                  data:
+                    type: object
+                    example:
+                      id_history: "yyyyy"
+                      makanan: "nama makanan"
+                      kalori: "1010"
+                      tanggal: "2024-10-10"
+                      image: "https:/xxxxxx"
+        "404":
+          description: Riwayat scan dengan ID tersebut tidak ditemukan.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: fail
+                  message:
+                    type: object
+                    properties:
+                      errors:
+                        type: object
+                        properties:
+                          history:
+                            type: array
+                            items:
+                              type: string
+                            example:
+                              - History dengan ID ${idHistory} tidak ditemukan.
+
+                  data:
+                    type: null
+                    example: null
+
+      security:
+        - BearerAuth: []
 
 components:
   securitySchemes:
